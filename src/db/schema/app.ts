@@ -47,7 +47,7 @@ export const students = pgTable("students", {
     id: uuid("id").primaryKey().defaultRandom(),
     userId: uuid("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
     classId: uuid("class_id").notNull().references(() => classes.id),
-    division: varchar("division").notNull().references(() => divisions.id),
+    gradeId: uuid("grade_id").notNull().references(() => grades.id),
     ...timestamps
 });
 
@@ -55,6 +55,34 @@ export const students = pgTable("students", {
 export const teachers = pgTable("teachers", {
     id: uuid("id").primaryKey().defaultRandom(),
     userId: uuid("user_id").notNull().references(() => users.id, { onDelete: "cascade" }),
-    division: varchar("division").notNull().references(() => divisions.id),
     ...timestamps
 });
+
+export const student_subjects = pgTable("student_subjects", {
+    id: uuid("id").primaryKey().defaultRandom(),
+    studentId: uuid("student_id").notNull().references(() => students.id, { onDelete: "cascade" }),
+    subjectId: uuid("subject_id").notNull().references(() => subjects.id, { onDelete: "cascade" }),
+    ...timestamps
+});
+
+export const teacher_subjects = pgTable("teacher_subjects", {
+    id: uuid("id").primaryKey().defaultRandom(),
+    teacherId: uuid("teacher_id").notNull().references(() => teachers.id, { onDelete: "cascade" }),
+    subjectId: uuid("subject_id").notNull().references(() => subjects.id, { onDelete: "cascade" }),
+    ...timestamps
+});
+
+export const teacher_classes = pgTable("teacher_classes", {
+    id: uuid("id").primaryKey().defaultRandom(),
+    teacherId: uuid("teacher_id").notNull().references(() => teachers.id, { onDelete: "cascade" }),
+    classId: uuid("class_id").notNull().references(() => classes.id, { onDelete: "cascade" }),
+    ...timestamps
+});
+
+export const teacher_grades = pgTable("teacher_grades", {
+    id: uuid("id").primaryKey().defaultRandom(),
+    teacherId: uuid("teacher_id").notNull().references(() => teachers.id, { onDelete: "cascade" }),
+    gradeId: uuid("grade_id").notNull().references(() => grades.id, { onDelete: "cascade" }),
+    ...timestamps
+});
+
